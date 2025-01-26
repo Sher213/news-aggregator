@@ -46,7 +46,7 @@ export default function App() {
       const data = await response.json();
 
       // Extract and store the first 5 articles
-      const fetchedArticles = data.articles.slice(0, 5).map((article, index) => ({
+      const fetchedArticles = data.articles.map((article, index) => ({
         id: index,
         title: article.title,
         link: article.url,
@@ -64,23 +64,40 @@ export default function App() {
     {/* Title */}
     <Box sx={{ flexGrow: 1, padding: 2, marginBottom: 10}}>
       <Typography variant="h4" gutterBottom>
-        My Search App
+        News Search
       </Typography>
     </Box>
 
     {/* Search bar and button */}
     <Grid2 container spacing={2} alignItems="center">
       <Grid2 xs={9} md={10}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          label="Search"
-          placeholder="Type your query here"
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <TextField
+        fullWidth
+        variant="outlined"
+        label="Search"
+        placeholder="Type your query here"
+        onChange={(e) => setSearchQuery(e.target.value)}
+        InputProps={{
+          style: { color: 'white' },
+        }}
+        InputLabelProps={{
+          style: { color: 'white' },
+        }}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': { borderColor: 'white' },
+            '&:hover fieldset': { borderColor: 'white' },
+            '&.Mui-focused fieldset': { borderColor: 'white' },
+          },
+        }}
+      />
       </Grid2>
       <Grid2 xs={3} md={2}>
-        <Button variant="contained" color="primary" fullWidth onClick={fetchArticles}>
+        <Button 
+          variant="contained" 
+          fullWidth onClick={fetchArticles}
+          sx={{ backgroundColor: '#024188', color: 'white' }}
+        >
           Search
         </Button>
       </Grid2>
