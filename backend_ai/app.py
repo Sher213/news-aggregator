@@ -10,7 +10,8 @@ app = Flask(__name__)
 
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-    'DATABASE_URL', 'postgresql://postgres:123456@localhost:5432/news_agg'
+    'DATABASE_URL',
+    f"postgresql://{os.getenv('POSTGRES_DB_USER', 'postgres')}:{os.getenv('POSTGRES_DB_PASSWORD', '123456')}@{os.getenv('POSTGRES_DB_HOST', 'localhost')}:{os.getenv('POSTGRES_DB_PORT', '5432')}/{os.getenv('POSTGRES_DB_NAME', 'news_agg')}"
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -42,7 +43,7 @@ def detect_fake_news_in_recent_articles():
         db.session.commit()
 
 def background_task():
-    """Runs every 30 seconds to check for new data and update the database"""
+    """Runs every 5 seconds to check for new data and update the database"""
     print("Running background task to update database...")
     update_sent_scores()
     detect_fake_news_in_recent_articles()
@@ -50,7 +51,7 @@ def background_task():
 
 # Start the background scheduler
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=background_task, trigger="interval", seconds=30)
+scheduler.add_job(func=background_task, trigger="interval", seconds=5)
 scheduler.start()
 
 @app.route('/')
@@ -61,6 +62,6 @@ if __name__ == '__main__':
     with app.app_context():  # Ensure app is initialized properly
         db.create_all()  # Create tables if they don't exist
     try:
-        app.run(debug=True, use_reloader=False)  # use_reloader=False to avoid duplicate tasks
+        app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
     finally:
         scheduler.shutdown()

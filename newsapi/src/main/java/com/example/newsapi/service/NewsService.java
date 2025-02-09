@@ -40,10 +40,14 @@ public class NewsService {
         // Extract articles from API response
         List<Map<String, Object>> articles = (List<Map<String, Object>>) apiResponse.get("articles");
 
+        System.out.println(articles);
+
         for (Map<String, Object> articleData : articles) {
             String articleUrl = (String) articleData.get("url");
+            String urlToImg = (String) articleData.getOrDefault("urlToImage", "No image available.");
             String title = (String) articleData.get("title");
-            String content = (String) articleData.getOrDefault("content", "No content available");
+            String content = (String) articleData.getOrDefault("content", "No content available.");
+            String description = (String) articleData.getOrDefault("description", "No decription available.");
 
             if (articleUrl == null || title == null) {
                 continue; // Skip invalid articles
@@ -54,7 +58,7 @@ public class NewsService {
 
             if (existingArticle.isEmpty()) {
                 // Save new article
-                Article newArticle = new Article(articleUrl, title, content, 0.0f, false);
+                Article newArticle = new Article(articleUrl, urlToImg, title, content, description, 0.0f, false);
                 articleRepository.save(newArticle);
                 System.out.println(articleUrl + "Added to database");
                 
