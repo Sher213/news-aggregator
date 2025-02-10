@@ -97,7 +97,7 @@ export default function App() {
       // Simulate a 7-second delay
       setTimeout(async () => {
         const response = await fetch(
-          `/api/articles?query=` + searchQuery
+          `https://jobangup.online/api/articles?query=` + searchQuery
         );
         const data = await response.json();
         console.log(data);
@@ -115,7 +115,7 @@ export default function App() {
         }));
         setArticles(fetchedArticles);
         setLoading(false); // Stop loading after articles are fetched
-      }, 7000); // 7-second delay
+      }, 10); // 10 ms delay
     } catch (error) {
       console.error("Error fetching articles:", error);
       setLoading(false); // Stop loading on error
@@ -126,32 +126,37 @@ export default function App() {
     <Box sx={{ flexGrow: 1, alignItems: 'center' }}>
       {/* Title */}
       <Box sx={{ flexGrow: 1, marginBottom: 10, display: 'flex', alignItems: 'center' }}>
-        <img src="./public/verinews-logo.svg" alt="VeriNews Logo" width="500px" height="auto" style={{ maxWidth: "500px" }} />
+        <img src="verinews-logo.svg" alt="VeriNews Logo" width="500px" height="auto" style={{ maxWidth: "500px" }} />
       </Box>
 
       {/* Search bar and button */}
       <Grid2 container spacing={2} alignItems="center">
         <Grid2 xs={9} md={10}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            label="Search"
-            placeholder="Type your query here"
-            onChange={(e) => setSearchQuery(e.target.value)}
-            InputProps={{
-              style: { color: 'white' },
-            }}
-            InputLabelProps={{
-              style: { color: 'white' },
-            }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: 'white' },
-                '&:hover fieldset': { borderColor: 'white' },
-                '&.Mui-focused fieldset': { borderColor: 'white' },
-              },
-            }}
-          />
+        <TextField
+          fullWidth
+          variant="outlined"
+          label="Search"
+          placeholder="Type your query here"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              fetchArticles(); // Trigger search when Enter is pressed
+            }
+          }}
+          InputProps={{
+            style: { color: 'white' },
+          }}
+          InputLabelProps={{
+            style: { color: 'white' },
+          }}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: 'white' },
+              '&:hover fieldset': { borderColor: 'white' },
+              '&.Mui-focused fieldset': { borderColor: 'white' },
+            },
+          }}
+        />
         </Grid2>
         <Grid2 xs={3} md={2}>
           <Button
@@ -207,7 +212,7 @@ export default function App() {
 
             {/* Fake News Warning */}
             {article.fakeNews && (
-              <Tooltip title="Caution, this article has been flagged as fake news" arrow>
+              <Tooltip title="Caution, this article has been flagged as misleading" arrow>
                 <WarningIcon
                   sx={{
                     color: 'red',

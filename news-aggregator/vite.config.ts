@@ -4,7 +4,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', // The URL of your backend
+        target: 'https://jobangup.online/', // The URL of your backend
         changeOrigin: true,             // Ensures the origin header is correctly set
       },
     },

@@ -16,7 +16,7 @@ interface NewsCardProps {
     description: string;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ id, title, link, urlToImage, description }) => {
+const NewsCard: React.FC<NewsCardProps> = ({title, link, urlToImage, description }) => {
     return (
         <Link href={link} target="_blank">
             <Card sx={{ maxWidth: 345 }}>
